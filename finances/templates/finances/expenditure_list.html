@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expenditure List</title>
+</head>
+<body>
+    <h1>Expenditure List</h1>
+    <ul>
+        {% for expenditure in expenditures %}
+            <li>{{ expenditure.description }}: {{ expenditure.amount }} on {{ expenditure.date }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
