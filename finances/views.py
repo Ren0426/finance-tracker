@@ -1,31 +1,44 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from .models import Income, Expenditure
 from .forms import IncomeForm, ExpenditureForm
-from .models import Income, Expenditure  
 
-def add_income(request):
-    if request.method == 'POST':
-        form = IncomeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('income_list')
-    else:
-        form = IncomeForm()
-    return render(request, 'add_income.html', {'form': form})
+class IncomeListView(ListView):
+    model = Income
+    template_name = 'finances/income_list.html'
+    context_object_name = 'incomes'
 
-def add_expenditure(request):
-    if request.method == 'POST':
-        form = ExpenditureForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('expenditure_list')
-    else:
-        form = ExpenditureForm()
-    return render(request, 'add_expenditure.html', {'form': form})
+class ExpenditureListView(ListView):
+    model = Expenditure
+    template_name = 'finances/expenditure_list.html'
+    context_object_name = 'expenditures'
 
-def income_list(request):
-    incomes = Income.objects.all()  
-    return render(request, 'income_list.html', {'incomes': incomes})
+class IncomeCreateView(CreateView):
+    model = Income
+    form_class = IncomeForm
+    template_name = 'finances/add_income.html'
 
-def expenditure_list(request):
-    expenditures = Expenditure.objects.all()  
-    return render(request, 'expenditure_list.html', {'expenditures': expenditures})
+class ExpenditureCreateView(CreateView):
+    model = Expenditure
+    form_class = ExpenditureForm
+    template_name = 'finances/add_expenditure.html'
+
+class IncomeUpdateView(UpdateView):
+    model = Income
+    form_class = IncomeForm
+    template_name = 'finances/add_income.html'
+
+class ExpenditureUpdateView(UpdateView):
+    model = Expenditure
+    form_class = ExpenditureForm
+    template_name = 'finances/add_expenditure.html'
+
+class IncomeDeleteView(DeleteView):
+    model = Income
+    template_name = 'finances/income_confirm_delete.html'
+    success_url = '/'
+
+class ExpenditureDeleteView(DeleteView):
+    model = Expenditure
+    template_name = 'finances/expenditure_confirm_delete.html'
+    success_url = '/'
