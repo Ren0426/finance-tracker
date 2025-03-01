@@ -8,7 +8,7 @@
     <h1>Income List</h1>
     <ul>
         {% for income in incomes %}
-            <li>{{ income.description }}: {{ income.amount }} on {{ income.date }}</li>
+            <li>{{ income.source }}: {{ income.amount }} on {{ income.date }}</li>
         {% endfor %}
     </ul>
 </body>
