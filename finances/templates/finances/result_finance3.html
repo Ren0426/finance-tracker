@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yearly Financial Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Yearly Financial Report</h1>
+        <table>
+            <tr>
+                <th>Year</th>
+                <th>Total Income</th>
+                <th>Total Expenditure</th>
+                <th>Balance</th>
+            </tr>
+            <tbody id="financeData"></tbody>
+        </table>
+        <h2>Total Balance: <span id="totalBalance">0</span></h2>
+        <button onclick="location.href='finance.html'">Add New</button>
+        <button onclick="location.href='see_finance.html'">Back</button>
+    </div>
+    <script>
+        let financeData = JSON.parse(localStorage.getItem("financeData")) || [];
+        let tableBody = document.getElementById("financeData");
+        let yearlyData = {};
+        let totalBalance = 0;
+
+        financeData.forEach(entry => {
+            let year = entry.date.slice(0, 4); 
+            if (!yearlyData[year]) {
+                yearlyData[year] = { income: 0, expenditure: 0, balance: 0 };
+            }
+            yearlyData[year].income += entry.income;
+            yearlyData[year].expenditure += entry.expenditure;
+            yearlyData[year].balance = yearlyData[year].income - yearlyData[year].expenditure;
+        });
+
+        for (let year in yearlyData) {
+            totalBalance += yearlyData[year].balance;
+            let row = `<tr>
+                <td>${year}</td>
+                <td>${yearlyData[year].income}</td>
+                <td>${yearlyData[year].expenditure}</td>
+                <td>${yearlyData[year].balance}</td>
+            </tr>`;
+            tableBody.innerHTML += row;
+        }
+        
+        document.getElementById("totalBalance").innerText = totalBalance;
+    </script>
+</body>
+</html>
