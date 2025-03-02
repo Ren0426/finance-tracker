@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Tracker App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        input {
+            width: 100%;
+            padding: 5px;
+            text-align: center;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Financial Tracker Application</h1>
+        <p>Visualize your income and expenditure to make smarter financial decisions.</p>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Income</th>
+                <th>Expenditure</th>
+            </tr>
+            <tr>
+                <td><input type="date" id="date"></td>
+                <td><input type="text" id="category" placeholder="Category"></td>
+                <td><input type="number" id="income" placeholder="Income"></td>
+                <td><input type="number" id="expenditure" placeholder="Expenditure"></td>
+            </tr>
+        </table>
+        <button id="addButton">Add</button>
+    </div>
+
+    <script>
+        document.getElementById("addButton").addEventListener("click", function() {
+            let date = document.getElementById("date").value;
+            let category = document.getElementById("category").value;
+            let income = parseFloat(document.getElementById("income").value) || 0;
+            let expenditure = parseFloat(document.getElementById("expenditure").value) || 0;
+            
+            if (!date || (!income && !expenditure)) {
+                alert("Please enter a valid date and at least one financial value.");
+                return;
+            }
+            
+            let financeData = JSON.parse(localStorage.getItem("financeData")) || [];
+            financeData.push({ date, category, income, expenditure });
+            localStorage.setItem("financeData", JSON.stringify(financeData));
+            
+            window.location.href = "see_finance.html";
+        });
+    </script>
+</body>
+</html>
