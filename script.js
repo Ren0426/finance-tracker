@@ -121,9 +121,82 @@ document.addEventListener("DOMContentLoaded", function () {
                 }]
             }
         });
+        
+        ["daily", "monthly", "yearly"].forEach(displayAdvice);
+
     }
 
     drawPieChart("dailyPieChart", "daily");
     drawPieChart("monthlyPieChart", "monthly");
     drawPieChart("yearlyPieChart", "yearly");
+
+    function generateAdvice(balance) {
+        let investPercent = 0, savePercent = 0, spendPercent = 0;
+    
+        if (balance < 0) {
+            return `Your balance is negative. First, cut down on your spending and prioritize savings`;
+        } else if (balance <= 1000) {
+            investPercent = 30;
+            savePercent = 30;
+            spendPercent = 40;
+        } else if (balance <= 5000) {
+            investPercent = 40;
+            savePercent = 30;
+            spendPercent = 30;
+        } else if (balance <= 10000) {
+            investPercent = 50;
+            savePercent = 20;
+            spendPercent = 30;
+        } else {
+            investPercent = 60;
+            savePercent = 20;
+            spendPercent = 20;
+        }
+    
+        const investAmount = (balance * investPercent) / 100;
+        const saveAmount = (balance * savePercent) / 100;
+        const spendAmount = (balance * spendPercent) / 100;
+    
+        return `Total Balance: $${balance.toFixed(2)}  
+        📈 Investment: $${investAmount.toFixed(2)} (${investPercent}%)  
+        💾 Saving: $${saveAmount.toFixed(2)} (${savePercent}%)  
+        🛍️ Available: $${spendAmount.toFixed(2)} (${spendPercent}%)`;
+    }
+    
+    function displayAdvice(viewType) {
+        const adviceElement = document.getElementById(`${viewType}-advice`);
+        if (!adviceElement) return;
+    
+        let incomeTotal = 0, expenseTotal = 0;
+    
+        if (viewType === "daily") {
+            incomeTotal = financeData.reduce((sum, entry) => sum + entry.income, 0);
+            expenseTotal = financeData.reduce((sum, entry) => sum + entry.expense, 0);
+        } else {
+            const groupedData = {};
+    
+            financeData.forEach(({ date, income, expense }) => {
+                const { year, month } = getMonthYear(date);
+                const key = viewType === "monthly" ? `${year}-${month}` : `${year}`;
+    
+                if (!groupedData[key]) {
+                    groupedData[key] = { income: 0, expense: 0 };
+                }
+    
+                groupedData[key].income += income;
+                groupedData[key].expense += expense;
+            });
+    
+            incomeTotal = Object.values(groupedData).reduce((sum, data) => sum + data.income, 0);
+            expenseTotal = Object.values(groupedData).reduce((sum, data) => sum + data.expense, 0);
+        }
+    
+        const balance = incomeTotal - expenseTotal;
+        adviceElement.innerHTML = generateAdvice(balance);
+    }
+    
+    ["daily", "monthly", "yearly"].forEach(displayAdvice);
+    
+    
 });
+
