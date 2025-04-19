@@ -196,7 +196,51 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
     ["daily", "monthly", "yearly"].forEach(displayAdvice);
+
+
+    // Security measures
+    // A function to escape HTML special characters
+    function escapeHTML(str) {
+        const div = document.createElement('div');
+        if (str) {
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+        return ''; //Escape the data to be displayed in the displayData function.
+    }
+
+    // Escape the data to be displayed in the displayData function
+    row.innerHTML = `
+    <td><input type="checkbox" class="delete-checkbox" data-id="${id}"></td>
+    <td>${escapeHTML(date)}</td>
+    <td>${escapeHTML(income)}</td>
+    <td>${escapeHTML(expense)}</td>
+    <td>${escapeHTML(income - expense)}</td>`;
+
+
+    //Enhanced data security
+    // Simple implementation of Base64 encoding and decoding
+    function encodeData(data) {
+        return btoa(JSON.stringify(data)); // Base64 encoding
+        }
+        
+    function decodeData(encodedData) {
+        return JSON.parse(atob(encodedData)); // Base64 decoding
+        }
+        
+    // When saving data, encode it and save it.
+    localStorage.setItem("financeData", encodeData(financeData));
+
+
+    //Bug fixes
+    const income = parseFloat(document.getElementById("income-input").value);
+    const expense = parseFloat(document.getElementById("expense-input").value);
     
+    // NaN check
+    if (isNaN(income) || isNaN(expense)) {
+        alert("Please enter valid numbers for income and expense.");
+        return; // In case of invalid data, no further processing is performed
+    }
+
     
 });
-
