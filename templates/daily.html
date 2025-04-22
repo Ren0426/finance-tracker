@@ -1,0 +1,42 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Report</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body data-page="daily">
+
+    <header>
+        <h1>Daily Result for {{ user.username }}!</h1>
+    </header>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Date</th>
+                <th>Income</th>
+                <th>Expense</th>
+                <th>Balance</th>
+            </tr>
+        </thead>
+        <tbody id="daily-history"></tbody>
+    </table>
+
+    <div class="button-row">
+        <button onclick="history.back()">Back</button>
+        <button type="submit" name="delete">Delete Selected</button>
+    </div>
+
+    <div id="daily-advice" style="font-size: 20px; font-weight: bold; color: darkgreen; margin: 20px; white-space: pre-line;"></div>
+
+    <div class="chart-container">
+        <canvas id="dailyPieChart"></canvas>
+    </div>
+    <script src="{% static 'script.js' %}" defer></script>
+</body>
+</html>

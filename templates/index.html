@@ -1,0 +1,42 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Tracker</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+
+<body data-page="index">    
+    <header>
+        <h1>Welcome to Your Finance Tracker</h1>
+        {% if user.is_authenticated %}
+            <p>Hello, {{ user.username }}! <a href="{% url 'logout' %}">Logout</a></p>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a> | <a href="{% url 'signup' %}">Sign Up</a>
+        {% endif %}
+    </header>
+
+    <section>
+        <h1>Finance Tracker</h1>
+        <h2>~Manage your finance~</h2>
+        <h3>Please enter the information, and click "Add Entry" button. Then you can see your daily, monthly, and yearly balance.</h3>
+        <br><br>
+
+        <input type="date" id="date-input">
+        <input type="number" id="income-input" placeholder="Income">
+        <input type="number" id="expense-input" placeholder="Expense">
+        <button id="add-entry">Add Entry</button>
+
+        <br><br><br>
+
+        <button onclick="window.location.href='{% url 'daily' %}'">Daily Result</button>
+        <button onclick="window.location.href='{% url 'monthly' %}'">Monthly Result</button>
+        <button onclick="window.location.href='{% url 'yearly' %}'">Yearly Result</button>
+    </section>
+    <script src="{% static 'script.js' %}" defer></script>
+</body>
+</html>
+
